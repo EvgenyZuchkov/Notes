@@ -21,6 +21,16 @@ const model = {
         view.renderNotes(this.notes)
         this.updateNotesView()
     },
+    toggleNote (id) {
+        this.notes = this.notes.map(note => {
+            if (note.id === id) {
+                note.isFavorite = !note.isFavorite
+            }
+            return note
+        })
+        view.renderNotes(this.notes)
+        this.updateNotesView()
+    },
     updateNotesView() {
         // 1. рендерит список заметок (вызывает метод view.renderNotes)
         view.renderNotes(this.notes)
@@ -56,6 +66,11 @@ const view = {
                 const noteId = +e.target.closest('.note').id
                 controller.deleteNote(noteId)
             }
+            if (e.target.closest('.favoriteToggle')) {
+                e.preventDefault()
+                const noteId = +e.target.closest('.note').id
+                controller.toggleNote(noteId)
+            }
         })
     },
     renderNotes(notes) {
@@ -75,8 +90,12 @@ const view = {
                 <div class="note-title">
                         <div>${note.title}</div>
                     <div class="note-links">
-                        <a><img src="${favIcon}" alt="favorite" id="fav"></a>
-                        <a href="#" id="delete" class="delete"><img src="assets/icon/trash.png" alt="delete"></a></div>                   
+                        <a href="#" id="favoriteToggle" class="favoriteToggle">
+                            <img src="${favIcon}" alt="favorite" id="fav">
+                        </a>
+                        <a href="#" id="delete" class="delete">
+                            <img src="assets/icon/trash.png" alt="delete">
+                        </a>                  
                     </div>
             </header>
                 <div class="note-content">${note.content}</div>
@@ -128,6 +147,9 @@ const controller = {
     },
     deleteNote(id) {
         model.deleteNote(id)
+    },
+    toggleNote(id) {
+        model.toggleNote(id)
     }
 }
 
