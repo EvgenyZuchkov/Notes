@@ -1,5 +1,6 @@
 const model = {
     notes: [],
+    isShowOnlyFavorite: false,
     addNote (title, content, color) {
         const id = Math.random()
         const note = {
@@ -31,9 +32,16 @@ const model = {
         view.renderNotes(this.notes)
         this.updateNotesView()
     },
+    toggleShowOnlyFavorite (isShowOnlyFavorite) {
+        this.isShowOnlyFavorite = isShowOnlyFavorite
+        this.updateNotesView()
+    },
     updateNotesView() {
-        // 1. рендерит список заметок (вызывает метод view.renderNotes)
-        view.renderNotes(this.notes)
+        const notesToRender = this.isShowOnlyFavorite
+            ? this.notes.filter(note => note.isFavorite)
+            : this.notes
+
+        view.renderNotes(notesToRender)
         // 2. рендерит количество заметок (вызывает метод view.renderNotesCount)
         view.renderNotesCount()
     }
@@ -71,6 +79,11 @@ const view = {
                 const noteId = +e.target.closest('.note').id
                 controller.toggleNote(noteId)
             }
+        })
+
+        const filterBox = document.querySelector('.filter-box')
+        filterBox.addEventListener('change', (e) => {
+            controller.toggleShowOnlyFavorite(e.target.checked)
         })
     },
     renderNotes(notes) {
@@ -150,6 +163,9 @@ const controller = {
     },
     toggleNote(id) {
         model.toggleNote(id)
+    },
+    toggleShowOnlyFavorite(isShowOnlyFavorite) {
+        model.toggleShowOnlyFavorite(isShowOnlyFavorite)
     }
 }
 

@@ -162,6 +162,14 @@ legend {
     0 0 0 4.5px #007BFF; /* Внешняя обводка */
 }
 
+.filter-box {
+    margin: 0 auto 12px;
+    max-width: 1152px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
 /*Область заметок*/
 
 .notes-list {
