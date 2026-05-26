@@ -19,7 +19,7 @@
         <img src="assets/logo.png" alt="logo">
         <div class="header-text">
             <img src="assets/icon/notes.png" alt="notes">
-            <span>Всего заметок: 5</span>
+            <span id="notesCount"></span>
         </div>
     </div>
 </header>
@@ -37,16 +37,28 @@
                 </div>
                 <div class="submit-form">
                     <div class="list-wrapper">
-                        <label>Выберите цвет заметки</label>
-                        <ul>
-                            <li><div class="circle yellow"></div></li>
-                            <li><div class="circle green"></div></li>
-                            <li><div class="circle blue"></div></li>
-                            <li><div class="circle red"></div></li>
-                            <li><div class="circle purple"></div></li>
-                        </ul>
+                        <fieldset class="fieldset">
+                            <legend class="label">Выберите цвет заметки</legend>
+                            <ul class="radio-list">
+                                <li>
+                                    <input checked class="radio" type="radio" name="color" value="yellow" aria-label="yellow" />
+                                </li>
+                                <li>
+                                    <input class="radio" type="radio" name="color" value="red" aria-label="red" />
+                                </li>
+                                <li>
+                                    <input class="radio" type="radio" name="color" value="green" aria-label="green" />
+                                </li>
+                                <li>
+                                    <input class="radio" type="radio" name="color" value="blue" aria-label="blue" />
+                                </li>
+                                <li>
+                                    <input class="radio" type="radio" name="color" value="purple" aria-label="purple" />
+                                </li>
+                            </ul>
+                        </fieldset>
                     </div>
-                    <button class="btn">
+                    <button class="btn" type="submit">
                         <img src="assets/icon/plus-svgrepo-com%201.png">
                         Добавить заметку
                     </button>
