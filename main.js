@@ -16,6 +16,11 @@ const model = {
         view.renderNotes(this.notes)
         this.updateNotesView()
     },
+    deleteNote (id) {
+        this.notes = this.notes.filter(note => note.id !== id)
+        view.renderNotes(this.notes)
+        this.updateNotesView()
+    },
     updateNotesView() {
         // 1. рендерит список заметок (вызывает метод view.renderNotes)
         view.renderNotes(this.notes)
@@ -40,6 +45,17 @@ const view = {
 
             // передаем данные в контроллер
             controller.addNote(title, content, color)
+            form.reset()
+        })
+
+        const notes = document.querySelector('.notes-list')
+        notes.addEventListener('click', (e) => {
+
+            if (e.target.closest('.delete')) {
+                e.preventDefault()
+                const noteId = +e.target.closest('.note').id
+                controller.deleteNote(noteId)
+            }
         })
     },
     renderNotes(notes) {
@@ -60,7 +76,7 @@ const view = {
                         <div>${note.title}</div>
                     <div class="note-links">
                         <a><img src="${favIcon}" alt="favorite" id="fav"></a>
-                        <a><img src="assets/icon/trash.png" alt="delete"></a></div>                   
+                        <a href="#" id="delete" class="delete"><img src="assets/icon/trash.png" alt="delete"></a></div>                   
                     </div>
             </header>
                 <div class="note-content">${note.content}</div>
@@ -77,7 +93,6 @@ const view = {
     },
     showMessage () {
         const messagesBox = document.querySelector('.messages-box')
-        let messagesBoxHTML = ''
         messagesBox.innerHTML += `<img src="assets/icon/alert/done.png" alt="done">`
 
         setTimeout(()=> {
@@ -87,7 +102,6 @@ const view = {
     },
     showMessageError () {
         const messagesBox = document.querySelector('.messages-box')
-        let messagesBoxHTML = ''
         messagesBox.innerHTML += `<img src="assets/icon/alert/error.png" alt="error">`
 
         setTimeout(()=> {
@@ -112,6 +126,9 @@ const controller = {
         model.addNote(title, content, color)
         view.showMessage()
     },
+    deleteNote(id) {
+        model.deleteNote(id)
+    }
 }
 
 function init () {
