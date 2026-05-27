@@ -1,10 +1,8 @@
 const model = {
     notes: [],
-    isShowOnlyFavorite: false,
     addNote (title, content, color) {
         const id = Math.random()
         const note = {
-            // 1. создадим новую заметку
             id: id,
             title: title,
             content: content,
@@ -14,12 +12,10 @@ const model = {
         // 2. добавим заметку в начало списка
         this.notes.push(note)
         // 3. обновим view
-        view.renderNotes(this.notes)
         this.updateNotesView()
     },
     deleteNote (id) {
         this.notes = this.notes.filter(note => note.id !== id)
-        view.renderNotes(this.notes)
         this.updateNotesView()
     },
     toggleNote (id) {
@@ -29,9 +25,9 @@ const model = {
             }
             return note
         })
-        view.renderNotes(this.notes)
         this.updateNotesView()
     },
+    isShowOnlyFavorite: false,
     toggleShowOnlyFavorite (isShowOnlyFavorite) {
         this.isShowOnlyFavorite = isShowOnlyFavorite
         this.updateNotesView()
@@ -61,7 +57,6 @@ const view = {
             const content = document.querySelector('textarea').value
             const color = document.querySelector('input[name="color"]:checked').value
 
-            // передаем данные в контроллер
             controller.addNote(title, content, color)
             form.reset()
         })
@@ -96,6 +91,7 @@ const view = {
             const favIcon = note.isFavorite
                 ? 'assets/icon/heart-active.png'
                 : 'assets/icon/heart-inactive.png'
+
             // Создание HTML заметки
             notesListHTML += `
             <div id="${note.id}" class="note">
@@ -115,7 +111,6 @@ const view = {
             </div>`
         })
         notesList.innerHTML = notesListHTML
-        // также здесь можно будет повесить обработчики кликов на кнопки удаления и избранного
     },
     renderNotesCount () {
         let notesCount = document.querySelector('#notesCount')
@@ -145,11 +140,6 @@ const view = {
 
 const controller = {
     addNote(title, content, color) {
-        if (title.trim() === '') {
-            view.showMessageError()
-            return
-        }
-
         if (title.length > 50) {
             view.showMessageError()
             return
