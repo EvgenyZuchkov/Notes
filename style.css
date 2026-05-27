@@ -171,6 +171,12 @@ legend {
 }
 
 /*Область заметок*/
+.description {
+    margin: 138px auto;
+    max-width: 824px;
+    width: 100%;
+    height: 48px;
+}
 
 .notes-list {
     max-width: 1152px;

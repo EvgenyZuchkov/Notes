@@ -61,7 +61,7 @@ const view = {
             form.reset()
         })
 
-        const notes = document.querySelector('.notes-list')
+        let notes = document.querySelector('.notes-list')
         notes.addEventListener('click', (e) => {
 
             if (e.target.closest('.delete')) {
@@ -86,14 +86,18 @@ const view = {
         let notesList = document.querySelector('.notes-list')
         let notesListHTML = ''
 
-        notes.forEach(note => {
-            // Определение картинки favorite
-            const favIcon = note.isFavorite
-                ? 'assets/icon/heart-active.png'
-                : 'assets/icon/heart-inactive.png'
+        if (model.notes.length === 0) {
+            notesList.innerHTML = '<div class="description">У вас нет еще ни одной заметки\n' +
+                'Заполните поля выше и создайте свою первую заметку!</div>'
+        } else {
+            notes.forEach(note => {
+                // Определение картинки favorite
+                const favIcon = note.isFavorite
+                    ? 'assets/icon/heart-active.png'
+                    : 'assets/icon/heart-inactive.png'
 
-            // Создание HTML заметки
-            notesListHTML += `
+                // Создание HTML заметки
+                notesListHTML += `
             <div id="${note.id}" class="note">
             <header style="background: ${note.color}">
                 <div class="note-title">
@@ -109,8 +113,9 @@ const view = {
             </header>
                 <div class="note-content">${note.content}</div>
             </div>`
-        })
-        notesList.innerHTML = notesListHTML
+            })
+            notesList.innerHTML = notesListHTML
+        }
     },
     renderNotesCount () {
         let notesCount = document.querySelector('#notesCount')
