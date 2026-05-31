@@ -10,7 +10,7 @@ const model = {
             isFavorite: false,
         }
         // 2. добавим заметку в начало списка
-        this.notes.push(note)
+        this.notes.unshift(note)
         // 3. обновим view
         this.updateNotesView()
     },
@@ -44,7 +44,7 @@ const model = {
 }
 
 const view = {
-    init() {
+    init: function () {
         this.renderNotes(model.notes)
         this.renderNotesCount(model.notes)
 
@@ -57,8 +57,13 @@ const view = {
             const content = document.querySelector('textarea').value
             const color = document.querySelector('input[name="color"]:checked').value
 
-            controller.addNote(title, content, color)
-            form.reset()
+            if (title !== '' && content !== '') {
+                controller.addNote(title, content, color)
+                form.reset()
+            } else {
+                this.showMessage('errorValue')
+            }
+
         })
 
         let notes = document.querySelector('.notes-list')
@@ -123,38 +128,38 @@ const view = {
             notesCount.innerHTML = `Всего заметок: ${model.notes.length}`
         }
     },
-    showMessage () {
+    showMessage (message) {
         const messagesBox = document.querySelector('.messages-box')
-        messagesBox.innerHTML += `<img src="assets/icon/alert/done.png" alt="done">`
+        if (message === 'done') {
+            messagesBox.innerHTML += `<img src="assets/icon/alert/done.png" alt="done">`
+        } else if (message === 'error') {
+            messagesBox.innerHTML += `<img src="assets/icon/alert/error.png" alt="error">`
+        } else if (message === 'delete') {
+            messagesBox.innerHTML += `<img src="assets/icon/alert/delete.png" alt="delete">`
+        } else if (message === 'errorValue') {
+            messagesBox.innerHTML += `<img src="assets/icon/alert/errorValue.png" alt="errorValue">`
+        }
 
         setTimeout(()=> {
             messagesBox.innerHTML = ''
         }, 3000)
 
     },
-    showMessageError () {
-        const messagesBox = document.querySelector('.messages-box')
-        messagesBox.innerHTML += `<img src="assets/icon/alert/error.png" alt="error">`
-
-        setTimeout(()=> {
-            messagesBox.innerHTML = ''
-        }, 3000)
-
-    }
 }
 
 const controller = {
     addNote(title, content, color) {
         if (title.length > 50) {
-            view.showMessageError()
+            view.showMessage('error')
             return
         }
 
         model.addNote(title, content, color)
-        view.showMessage()
+        view.showMessage('done')
     },
     deleteNote(id) {
         model.deleteNote(id)
+        view.showMessage('delete')
     },
     toggleNote(id) {
         model.toggleNote(id)
